@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>OnlyFounders: Pitch Strength Agent</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Light blue-gray background */
+        }
+        .container {
+            max-width: 800px;
+            margin: 2rem auto;
+            padding: 2rem;
+            background-color: #ffffff;
+            border-radius: 12px; /* More rounded corners */
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); /* Softer shadow */
+        }
+        .btn {
+            @apply px-6 py-3 rounded-lg font-semibold transition-all duration-300 ease-in-out;
+            background-color: #4a90e2; /* Blue primary color */
+            color: white;
+        }
+        .btn:hover {
+            background-color: #357bd8; /* Darker blue on hover */
+            transform: translateY(-2px); /* Slight lift effect */
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+        }
+        .btn-secondary {
+            @apply bg-gray-200 text-gray-700 hover:bg-gray-300;
+        }
+        textarea {
+            @apply w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-400 focus:border-transparent;
+            min-height: 150px;
+        }
+        input[type="file"] {
+            @apply block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100;
+        }
+        .loading-spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-left-color: #4a90e2;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .result-box {
+            @apply bg-gray-50 p-4 rounded-lg border border-gray-200 mt-6;
+        }
+    </style>
+</head>
+<body class="p-4">
+    <div class="container">
+        <h1 class="text-4xl font-bold text-center text-gray-800 mb-8">Pitch Strength Agent</h1>
+        <p class="text-center text-gray-600 mb-8">Upload your startup pitch or paste text to get a decentralized strength score, powered by AI and privacy-preserving tech.</p>
+
+        <div class="mb-6 border-b border-gray-200 pb-6">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Pitch Input</h2>
+            <div class="mb-4">
+                <label for="pitchFile" class="block text-gray-700 text-sm font-bold mb-2">Upload Pitch File (.txt, .pdf, .docx)</label>
+                <input type="file" id="pitchFile" accept=".txt,.pdf,.docx" class="shadow-sm">
+            </div>
+            <div class="text-center text-gray-500 my-4">OR</div>
+            <div class="mb-4">
+                <label for="pitchText" class="block text-gray-700 text-sm font-bold mb-2">Paste Pitch Text</label>
+                <textarea id="pitchText" placeholder="Paste your pitch text here..." class="shadow-sm"></textarea>
+            </div>
+            <div class="flex justify-center space-x-4">
+                <button id="analyzeBtn" class="btn flex items-center justify-center space-x-2">
+                    <span id="buttonText">Analyze Pitch</span>
+                    <div id="loadingSpinner" class="loading-spinner hidden"></div>
+                </button>
+                <button id="clearBtn" class="btn-secondary btn">Clear Inputs</button>
+            </div>
+        </div>
+
+        <div id="resultsSection" class="hidden">
+            <h2 class="text-2xl font-semibold text-gray-700 mb-4">Analysis Results</h2>
+            <div id="messageBox" class="p-4 rounded-lg text-lg hidden" role="alert"></div>
+            <div id="scoresDisplay" class="result-box">
+                <p class="text-gray-800 font-semibold mb-2">Overall Score: <span id="overallScore" class="text-blue-600 text-xl"></span></p>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm mt-4">
+                    <div>
+                        <p class="font-medium text-gray-700">Clarity Score: <span id="clarityScore" class="text-blue-500"></span></p>
+                        <p class="text-gray-600 text-xs italic" id="clarityReasoning"></p>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-700">Originality Score: <span id="originalityScore" class="text-blue-500"></span></p>
+                        <p class="text-gray-600 text-xs italic" id="originalityReasoning"></p>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-700">Team Strength Score: <span id="teamStrengthScore" class="text-blue-500"></span></p>
+                        <p class="text-gray-600 text-xs italic" id="teamStrengthReasoning"></p>
+                    </div>
+                    <div>
+                        <p class="font-medium text-gray-700">Market Fit Score: <span id="marketFitScore" class="text-blue-500"></span></p>
+                        <p class="text-gray-600 text-xs italic" id="marketFitReasoning"></p>
+                    </div>
+                </div>
+                <div class="mt-4 text-xs text-gray-500 border-t border-gray-200 pt-4">
+                    <p>TEE Processed: <span id="teeProcessed"></span></p>
+                    <p>ZKP Hash: <span id="zkpHash" class="break-all"></span></p>
+                    <p>On-Chain Transaction: <span id="onChainTx" class="break-all"></span></p>
+                    <p>Status: <span id="status"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
